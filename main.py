@@ -1,3 +1,4 @@
+from random import randint
 # SCREEN CONSTANTS
 WIDTH = 600
 HEIGHT = 500
@@ -11,7 +12,8 @@ ship = Actor('ship')
 ship.centerx = WIDTH / 2
 ship.bottom = HEIGHT
 meteor = Actor('meteor1')
-meteor.centerx = WIDTH / 2
+# meteor.centerx = WIDTH / 2 changed to 
+meteor.left = randint(0, WIDTH - meteor.width)
 meteor.top = 0
 laser = Actor('laser')
 laser.x = -100
@@ -41,7 +43,8 @@ def update_laser():
 def update_meteor():
     meteor.y += 1
     if meteor.colliderect(laser):
-        meteor.x = -200
+        meteor.bottom = 0
+        meteor.left = randint(0, WIDTH - meteor.width)
     
 def update_ship():
     if keymap['up']:
