@@ -13,6 +13,9 @@ ship.bottom = HEIGHT
 meteor = Actor('meteor1')
 meteor.centerx = WIDTH / 2
 meteor.top = 0
+laser = Actor('laser')
+laser.x = -100
+
 
 # Keys Dictionary
 keymap = {'up' : False, 'down' : False, 'left' : False, 'right' : False}
@@ -22,13 +25,23 @@ def draw():
     screen.fill(BLACK)
     meteor.draw()
     ship.draw()
+    laser.draw()
 
 def update():
     update_ship()
     update_meteor()
+    update_laser()
+
+def update_laser():
+    if laser.x >= 0:
+        laser.y -= 6
+    if laser.y < 0:
+        laser.x = -100
 
 def update_meteor():
     meteor.y += 1
+    if meteor.colliderect(laser):
+        meteor.x = -200
     
 def update_ship():
     if keymap['up']:
@@ -48,6 +61,9 @@ def update_ship():
         if ship.right > WIDTH:
             ship.right = WIDTH
     
+def fire():
+    laser.bottom = ship.top
+    laser.centerx = ship.centerx
 
 def on_key_down(key):
     if key == keys.UP or key == keys.W:
@@ -58,6 +74,8 @@ def on_key_down(key):
         keymap['left'] = True
     if key == keys.RIGHT or key == keys.D:
         keymap['right'] = True
+    if key == keys.SPACE:
+        fire()
 
 def on_key_up(key):
     if key == keys.UP or key == keys.W:
